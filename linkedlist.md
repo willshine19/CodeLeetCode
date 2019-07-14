@@ -4,6 +4,18 @@
 
 https://leetcode-cn.com/problems/middle-of-the-linked-list/
 
+快慢指针
+
+```python
+class Solution:
+    def middleNode(self, head: ListNode) -> ListNode:
+        fast = slow = head
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+        return slow
+```
+
 
 ### 203. Remove Linked List Elements
 
@@ -13,12 +25,6 @@ Remove all elements from a linked list of integers that have value val.
 
 
 ```python
-# Definition for singly-linked list.
-# class ListNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
-
 class Solution:
     def removeElements(self, head: ListNode, val: int) -> ListNode:
         while head and head.val == val:
@@ -338,304 +344,181 @@ class Solution:
             return head
 ```
 
+### 21. Merge Two Sorted Lists
 
-### Partition List
+https://leetcode-cn.com/problems/merge-two-sorted-lists/
 
-https://www.lintcode.com/problem/partition-list/description
+```python
+class Solution:
+    def mergeTwoLists(self, l1: ListNode, l2: ListNode) -> ListNode:
+        if not l1:
+            return l2
+        if not l2:
+            return l1
+        
+        head = None
+        if l1.val < l2.val:
+            head = l1
+            l1 = l1.next
+        else:
+            head = l2
+            l2 = l2.next
+        
+        this_node = head
+        while l1 and l2:
+            if l1.val < l2.val:
+                this_node.next = l1
+                this_node = l1
+                l1 = l1.next
+            else:
+                this_node.next = l2
+                this_node = l2
+                l2 = l2.next
+        
+        if l1:
+            this_node.next = l1
+        
+        if l2:
+            this_node.next = l2
+        return head
+```
+
+### Nth to Last Node in List
+
+https://www.lintcode.com/problem/nth-to-last-node-in-list/
 
 ```java
-/**
- * Definition for ListNode.
- * public class ListNode {
- *     int val;
- *     ListNode next;
- *     ListNode(int val) {
- *         this.val = val;
- *         this.next = null;
- *     }
- * }
- */ 
 public class Solution {
-    /**
-     * @param head: The first node of linked list.
-     * @param x: an integer
-     * @return: a ListNode 
-     */
-    public ListNode partition(ListNode head, int x) {
-        // 2015-4-24
+    ListNode nthToLast(ListNode head, int n) {
+        // 2015-08-28
         if (head == null) {
-            return head;
+            return null;
         }
-        // 两个新的链表
-        ListNode dummyA = new ListNode(0);
-        ListNode nodeA = dummyA;
-        ListNode dummyB = new ListNode(0);
-        ListNode nodeB = dummyB;
         
-        while (head != null) {
-            if (head.val < x) {
-                nodeA.next = head;
-                nodeA = nodeA.next;
-            } else {
-                nodeB.next = head;
-                nodeB = nodeB.next;
+        ListNode fast = head;
+        ListNode slow = head;
+        
+        for (int i = 0; i < n; i++) {
+            fast = fast.next;
+        }
+        
+        while (fast != null) {
+            slow = slow.next;
+            fast = fast.next;
+        }
+        
+        return slow;
+    }
+}
+```
+
+### 19. Remove Nth Node From End of List
+
+https://www.lintcode.com/problem/remove-nth-node-from-end-of-list/description
+
+https://leetcode-cn.com/problems/remove-nth-node-from-end-of-list/
+
+快慢指针
+
+```python
+class Solution:
+    def removeNthFromEnd(self, head: ListNode, n: int) -> ListNode:
+        // 2019.7.8
+        dummy = ListNode(0)
+        dummy.next = head
+        fast = head
+        slow = dummy
+        for i in range(n):
+            fast = fast.next
+        while fast:
+            fast = fast.next
+            slow = slow.next
+        slow.next = slow.next.next
+        return dummy.next
+```
+
+```java
+public class Solution {
+    ListNode removeNthFromEnd(ListNode head, int n) {
+        // 2015-04-29 O(n)
+        if (head == null) {
+            return null;
+        }
+        ListNode dummy = new ListNode(0);
+        dummy.next = head; //被删除的节点可能是头节点，所以要用dummy
+        head = dummy;
+        ListNode nthNode = dummy;
+        for (int i = 0; i < n; i++) {
+            nthNode = nthNode.next;
+            if (nthNode == null) {
+                return null;
             }
+        }
+        while (nthNode.next != null) {
             head = head.next;
+            nthNode = nthNode.next;
         }
-        nodeA.next = dummyB.next;
-        nodeB.next = null;
-        return dummyA.next;
-    }
-}
- 
-```
-
-### Sort List
-
-https://www.lintcode.com/problem/sort-list/description
-
-```java
-/**
- * Definition for ListNode.
- * public class ListNode {
- *     int val;
- *     ListNode next;
- *     ListNode(int val) {
- *         this.val = val;
- *         this.next = null;
- *     }
- * }
- */ 
-public class Solution {
-    /**
-     * @param head: The head of linked list.
-     * @return: You should return the head of the sorted linked list,
-                    using constant space complexity.
-     */
-    public ListNode sortList(ListNode head) {  
-        // 2015-5-24 O(nlogn) 分治法 递归 类似归并排序
-        // exit condition
-        if (head == null || head.next == null) {
-            return head;
-        }
-        
-        ListNode mid = findMid(head);
-        ListNode listB = sortList(mid.next);
-        mid.next = null;
-        ListNode listA = sortList(head);
-        // listB 不长于 listA
-        
-        return mergeList(listA, listB);
-        
-    }
-    
-    private ListNode findMid(ListNode head) {
-        if (head == null) {
-            return head;
-        }
-        ListNode slow = head;
-        ListNode fast = head;
-        while (fast.next != null && fast.next.next != null) {
-            slow = slow.next;
-            fast = fast.next.next;
-        }
-        return slow;
-    }
-    
-    private ListNode mergeList(ListNode listA, ListNode listB) {
-        ListNode dummy = new ListNode(0);
-        ListNode tail = dummy;
-        while (listA != null && listB != null) {
-            if (listA.val < listB.val) {
-                tail.next = listA;
-                listA = listA.next;
-            } else {
-                tail.next = listB;
-                listB = listB.next;
-            }
-            tail = tail.next;
-        }
-        if (listA != null) {
-            tail.next = listA;
-        }
-        if (listB != null) {
-            tail.next = listB;
-        }
+        // 删掉head的下一个节点
+        head.next = head.next.next;
         return dummy.next;
     }
 }
  
 ```
 
-### Reorder List
 
-https://www.lintcode.com/problem/reorder-list/description
+### 61. Rotate List
 
-```java
-/**
- * Definition for ListNode.
- * public class ListNode {
- *     int val;
- *     ListNode next;
- *     ListNode(int val) {
- *         this.val = val;
- *         this.next = null;
- *     }
- * }
- */ 
-public class Solution {
-    /**
-     * @param head: The head of linked list.
-     * @return: void
-     */
-    public void reorderList(ListNode head) {  
-        // 2015-08-22 基于栈 O(n)
-        if (head == null || head.next == null) {
-            return;
-        }
-        ListNode midNode = findMid(head);
-        ListNode leftHead = head;
-        ListNode rightHead = midNode.next;
-        midNode.next = null;
-        
-        ArrayDeque<ListNode> stack = new ArrayDeque<>();
-        // 入栈
-        while (rightHead != null) {
-            stack.push(rightHead);
-            rightHead = rightHead.next;
-        }
-        // 出栈
-        while (!stack.isEmpty()) {
-            ListNode temp = leftHead.next;
-            leftHead.next = stack.pop();
-            leftHead = leftHead.next;
-            leftHead.next = temp;
-            if (leftHead.next != null) {
-                leftHead = leftHead.next;
-            }
-        }
-        return;
-    }
-    
-    /**
-     * return the middle node of the list
-     */
-     private ListNode findMid(ListNode head) {
-         if (head == null || head.next == null) {
-             return head;
-         }
-         ListNode fast = head;
-         ListNode slow = head;
-         while (fast.next != null && fast.next.next != null) {
-             fast = fast.next.next;
-             slow = slow.next;
-         }
-         return slow;
-     }
-}
-```
-
-```java
-/**
- * Definition for ListNode.
- * public class ListNode {
- *     int val;
- *     ListNode next;
- *     ListNode(int val) {
- *         this.val = val;
- *         this.next = null;
- *     }
- * }
- */ 
-public class Solution {
-    /**
-     * @param head: The head of linked list.
-     * @return: void
-     */
-    public void reorderList(ListNode head) {  
-        // 2015-04-24 O(n)
-        if (head == null) {
-            return;
-        }
-        ListNode mid = findMid(head);
-        ListNode tail = reverseList(mid.next);
-        mid.next = null;
-        mergeList(head, tail);
-    }
-    
-    private ListNode findMid (ListNode head) {
-        if (head == null) {
-            return head;
-        }
-        ListNode slow = head;
-        ListNode fast = head;
-        while (fast.next != null && fast.next.next != null) {
-            fast = fast.next.next;
-            slow = slow.next;
-        }
-        return slow;
-    }
-    
-    private ListNode reverseList(ListNode head) {
-        if (head == null) {
-            return head;
-        }
-        ListNode dummy = new ListNode(0);
-        while (head != null) {
-            ListNode temp = head.next;
-            head.next = dummy.next;
-            dummy.next = head;
-            head = temp;
-        }
-        return dummy.next;
-    }
-    
-    private ListNode mergeList(ListNode listA, ListNode listB) {
-        // 已知 listB 比 listA 短一 或 相等
-        ListNode dummy = new ListNode(0);
-        ListNode tail = dummy;
-        while (listA != null && listB != null) {
-            tail.next = listA;
-            tail = tail.next;
-            listA = listA.next;
-            tail.next = listB;
-            tail = tail.next;
-            listB = listB.next;
-        }
-        if (listA != null) {
-            tail.next = listA;
-        }
-        return dummy.next;
-    }
-}
- 
-```
-
-### Rotate List
+https://leetcode-cn.com/problems/rotate-list/
 
 https://www.lintcode.com/problem/rotate-list/description
 
+Given a linked list, rotate the list to the right by k places, where k is non-negative.
+
+Input: 1->2->3->4->5->NULL, k = 2
+Output: 4->5->1->2->3->NULL
+
+易错题: 当 k 为 0 或 length 的整数倍， 不需要 rotate
+
+```python
+class Solution:
+    def rotateRight(self, head: ListNode, k: int) -> ListNode:
+        # 2019.7.10
+        if not head:
+            return head
+        
+        def getLength(head):
+            count = 0
+            while head:
+                count += 1
+                head = head.next
+            return count
+        
+        length = getLength(head)
+        k = k % length
+        
+        if not k:
+            return head
+        
+        slow = head
+        fast = head
+        for i in range(k):
+            fast = fast.next
+
+        while fast.next:
+            fast = fast.next
+            slow = slow.next
+            
+        new_head = slow.next
+        slow.next = None
+        fast.next = head
+        return new_head
+```
+
 ```java
-/**
- * Definition for singly-linked list.
- * public class ListNode {
- *     int val;
- *     ListNode next;
- *     ListNode(int x) {
- *         val = x;
- *         next = null;
- *     }
- * }
- */
 public class Solution {
-    /**
-     * @param head: the List
-     * @param k: rotate to the right k places
-     * @return: the list after rotation
-     */
     public ListNode rotateRight(ListNode head, int k) {
         // 2015-08-28 O(n) 
-        // 这一题需要注意测试用例，k可以为0也可以很大
         if (head == null) {
             return head;
         }
@@ -673,68 +556,77 @@ public class Solution {
 }
 ```
 
-### Nth to Last Node in List
+### 86. Partition List
 
-https://www.lintcode.com/problem/nth-to-last-node-in-list/
+https://www.lintcode.com/problem/partition-list/description
 
-```java
-/**
- * Definition for ListNode.
- * public class ListNode {
- *     int val;
- *     ListNode next;
- *     ListNode(int val) {
- *         this.val = val;
- *         this.next = null;
- *     }
- * }
- */ 
-public class Solution {
-    /**
-     * @param head: The first node of linked list.
-     * @param n: An integer.
-     * @return: Nth to last node of a singly linked list. 
-     */
-    ListNode nthToLast(ListNode head, int n) {
-        // 2015-08-28
-        if (head == null) {
-            return null;
-        }
-        
-        ListNode fast = head;
-        ListNode slow = head;
-        
-        for (int i = 0; i < n; i++) {
-            fast = fast.next;
-        }
-        
-        while (fast != null) {
-            slow = slow.next;
-            fast = fast.next;
-        }
-        
-        return slow;
-    }
-}
+https://leetcode-cn.com/problems/partition-list
+
+Given a linked list and a value x, partition it such that all nodes less than x come before nodes greater than or equal to x.
+
+```python
+class Solution:
+    def partition(self, head: ListNode, x: int) -> ListNode:
+        // 2019.7.8
+        small_dummy = ListNode(0)
+        small_this = small_dummy
+        large_dummy = ListNode(0)
+        large_this = large_dummy
+        while head:
+            if head.val < x:
+                small_this.next = head
+                small_this = small_this.next
+            else:
+                large_this.next = head
+                large_this = large_this.next
+            head = head.next
+        small_this.next = large_dummy.next
+        large_this.next = None
+        return small_dummy.next
 ```
 
+```java
+public class Solution {
+    public ListNode partition(ListNode head, int x) {
+        // 2015-4-24
+        if (head == null) {
+            return head;
+        }
+        // 两个新的链表
+        ListNode dummyA = new ListNode(0);
+        ListNode nodeA = dummyA;
+        ListNode dummyB = new ListNode(0);
+        ListNode nodeB = dummyB;
+        
+        while (head != null) {
+            if (head.val < x) {
+                nodeA.next = head;
+                nodeA = nodeA.next;
+            } else {
+                nodeB.next = head;
+                nodeB = nodeB.next;
+            }
+            head = head.next;
+        }
+        nodeA.next = dummyB.next;
+        nodeB.next = null;
+        return dummyA.next;
+    }
+}
+ 
+```
 
 ### Add Two Numbers
 
 https://www.lintcode.com/problem/add-two-numbers/description
 
+https://leetcode-cn.com/problems/add-two-numbers/
+
+The digits are stored **in reverse order**
+
+(2 -> 4 -> 3) 表示 342
+
 ```java
-/**
- * Definition for singly-linked list.
- * public class ListNode {
- *     int val;
- *     ListNode next;
- *     ListNode(int x) {
- *         val = x;
- *         next = null;      
- *     }
- * }
- */
 public class Solution {
     /**
      * @param l1: the first list
@@ -788,76 +680,22 @@ public class Solution {
 }
 ```
 
-### Insertion Sort List
+### Add Two Numbers II
 
-https://www.lintcode.com/problem/insertion-sort-list/description
+https://leetcode-cn.com/problems/add-two-numbers-ii/
 
-```java
-/**
- * Definition for ListNode.
- * public class ListNode {
- *     int val;
- *     ListNode next;
- *     ListNode(int val) {
- *         this.val = val;
- *         this.next = null;
- *     }
- * }
- */ 
-public class Solution {
-    /**
-     * @param head: The first node of linked list.
-     * @return: The head of linked list.
-     */
-    public ListNode insertionSortList(ListNode head) {
-        // 2015-08-28 O(n^2)
-        // 建立新的dummy链
-        ListNode dummy = new ListNode(0);
-        
-        // 遍历两个链表，一定是两个while循环嵌套        
-        // 遍历未排序的链
-        while (head != null) {
-            // 从头遍历dummy链，找合适的插入位置
-            ListNode insertPos = dummy;
-            while (insertPos.next != null && insertPos.next.val < head.val) {
-                insertPos = insertPos.next;
-            }
-            
-            // 找到插入位置，在insertPoc.next的位置插入head节点
-            ListNode temp = head.next;
-            head.next = insertPos.next;
-            insertPos.next = head;
-            head = temp;
-        }
- 
-        return dummy.next;
-    }
-}
-```
+(5 -> 6 -> 4) 表示 564
 
-### Linked List Cycle
+### 141. Linked List Cycle
 
 https://www.lintcode.com/problem/linked-list-cycle/
+
+https://leetcode-cn.com/problems/linked-list-cycle/
 
 Given a linked list, determine if it has a cycle in it.
 
 ```java
-/**
- * Definition for ListNode.
- * public class ListNode {
- *     int val;
- *     ListNode next;
- *     ListNode(int val) {
- *         this.val = val;
- *         this.next = null;
- *     }
- * }
- */ 
 public class Solution {
-    /**
-     * @param head: The first node of linked list.
-     * @return: True if it has a cycle, or false
-     */
     public boolean hasCycle(ListNode head) {  
         // 2015-04-26
         if (head == null) {
@@ -882,26 +720,10 @@ public class Solution {
 https://www.lintcode.com/problem/linked-list-cycle-ii/description
 
 ```java
-/**
- * Definition for ListNode.
- * public class ListNode {
- *     int val;
- *     ListNode next;
- *     ListNode(int val) {
- *         this.val = val;
- *         this.next = null;
- *     }
- * }
- */ 
 public class Solution {
-    /**
-     * @param head: The first node of linked list.
-     * @return: The node where the cycle begins. 
-     *           if there is no cycle, return null
-     */
     public ListNode detectCycle(ListNode head) {  
         // 2015-5-31 实在想不到
-        if (head == null || head.next==null) {
+        if (head == null || head.next == null) {
             return null;
         }
  
@@ -909,7 +731,7 @@ public class Solution {
         fast = head.next;
         slow = head;
         while (fast != slow) {
-            if(fast==null || fast.next==null)
+            if(fast == null || fast.next == null)
                 return null;
             fast = fast.next.next;
             slow = slow.next;
@@ -932,19 +754,7 @@ https://www.lintcode.com/problem/copy-list-with-random-pointer/description
 Version I HashMap
 
 ```java
-/**
- * Definition for singly-linked list with a random pointer.
- * class RandomListNode {
- *     int label;
- *     RandomListNode next, random;
- *     RandomListNode(int x) { this.label = x; }
- * };
- */
 public class Solution {
-    /**
-     * @param head: The head of linked list with a random pointer.
-     * @return: A new head of a deep copy of the list.
-     */
     public RandomListNode copyRandomList(RandomListNode head) {
         // 2015-4-26 O(n)
         if (head == null) {
@@ -984,14 +794,6 @@ public class Solution {
 Version II no HashMap
 
 ```java
-/**
- * Definition for singly-linked list with a random pointer.
- * class RandomListNode {
- *     int label;
- *     RandomListNode next, random;
- *     RandomListNode(int x) { this.label = x; }
- * };
- */
 public class Solution {  
     /**
      * 遍历链表，将每一个节点复制一份，并插进原链表，插在被复制节点的下一个节点的位置，
@@ -1050,55 +852,6 @@ public class Solution {  
  
 ```
 
-### Remove Nth Node From End of List
-
-https://www.lintcode.com/problem/remove-nth-node-from-end-of-list/description
-
-```java
-/**
- * Definition for ListNode.
- * public class ListNode {
- *     int val;
- *     ListNode next;
- *     ListNode(int val) {
- *         this.val = val;
- *         this.next = null;
- *     }
- * }
- */ 
-public class Solution {
-    /**
-     * @param head: The first node of linked list.
-     * @param n: An integer.
-     * @return: The head of linked list.
-     */
-    ListNode removeNthFromEnd(ListNode head, int n) {
-        // 2015-04-29 O(n)
-        if (head == null) {
-            return null;
-        }
-        ListNode dummy = new ListNode(0);
-        dummy.next = head; //被删除的节点可能是头节点，所以要用dummy
-        head = dummy;
-        ListNode nthNode = dummy;
-        for (int i = 0; i < n; i++) {
-            nthNode = nthNode.next;
-            if (nthNode == null) {
-                return null;
-            }
-        }
-        while (nthNode.next != null) {
-            head = head.next;
-            nthNode = nthNode.next;
-        }
-        // 删掉head的下一个节点
-        head.next = head.next.next;
-        return dummy.next;
-    }
-}
- 
-```
-
 ### Merge k Sorted Lists
 
 https://www.lintcode.com/problem/merge-k-sorted-lists/description
@@ -1106,22 +859,7 @@ https://www.lintcode.com/problem/merge-k-sorted-lists/description
 Version 1
 
 ```java
-/**
- * Definition for ListNode.
- * public class ListNode {
- *     int val;
- *     ListNode next;
- *     ListNode(int val) {
- *         this.val = val;
- *         this.next = null;
- *     }
- * }
- */ 
 public class Solution {
-    /**
-     * @param lists: a list of ListNode
-     * @return: The head of one sorted list.
-     */
     public ListNode mergeKLists(List<ListNode> lists) {  
         // 2015-08-21
         if (lists == null || lists.size() == 0) {
@@ -1165,22 +903,7 @@ public class Solution {
 Version 2 堆排序
 
 ```java
-/**
- * Definition for ListNode.
- * public class ListNode {
- *     int val;
- *     ListNode next;
- *     ListNode(int val) {
- *         this.val = val;
- *         this.next = null;
- *     }
- * }
- */ 
 public class Solution {
-    /**
-     * @param lists: a list of ListNode
-     * @return: The head of one sorted list.
-     */
     private Comparator<ListNode> ListNodeComparator = new Comparator<ListNode>() {
         public int compare(ListNode left, ListNode right) {
             if (left == null) {
@@ -1213,6 +936,125 @@ public class Solution {
             if (head.next != null) {
                 heap.add(head.next);
             }
+        }
+        return dummy.next;
+    }
+}
+ 
+```
+
+
+### 143. Reorder List
+
+https://leetcode-cn.com/problems/reorder-list/
+
+https://www.lintcode.com/problem/reorder-list/description
+
+Given 1->2->3->4, reorder it to 1->4->2->3.
+
+```java
+public class Solution {
+    public void reorderList(ListNode head) {  
+        // 2015-08-22 基于栈 O(n)
+        if (head == null || head.next == null) {
+            return;
+        }
+        ListNode midNode = findMid(head);
+        ListNode leftHead = head;
+        ListNode rightHead = midNode.next;
+        midNode.next = null;
+        
+        ArrayDeque<ListNode> stack = new ArrayDeque<>();
+        // 入栈
+        while (rightHead != null) {
+            stack.push(rightHead);
+            rightHead = rightHead.next;
+        }
+        // 出栈
+        while (!stack.isEmpty()) {
+            ListNode temp = leftHead.next;
+            leftHead.next = stack.pop();
+            leftHead = leftHead.next;
+            leftHead.next = temp;
+            if (leftHead.next != null) {
+                leftHead = leftHead.next;
+            }
+        }
+        return;
+    }
+    
+    /**
+     * return the middle node of the list
+     */
+     private ListNode findMid(ListNode head) {
+         if (head == null || head.next == null) {
+             return head;
+         }
+         ListNode fast = head;
+         ListNode slow = head;
+         while (fast.next != null && fast.next.next != null) {
+             fast = fast.next.next;
+             slow = slow.next;
+         }
+         return slow;
+     }
+}
+```
+
+```java
+public class Solution {
+    public void reorderList(ListNode head) {  
+        // 2015-04-24 O(n)
+        if (head == null) {
+            return;
+        }
+        ListNode mid = findMid(head);
+        ListNode tail = reverseList(mid.next);
+        mid.next = null;
+        mergeList(head, tail);
+    }
+    
+    private ListNode findMid (ListNode head) {
+        if (head == null) {
+            return head;
+        }
+        ListNode slow = head;
+        ListNode fast = head;
+        while (fast.next != null && fast.next.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+        return slow;
+    }
+    
+    private ListNode reverseList(ListNode head) {
+        if (head == null) {
+            return head;
+        }
+        ListNode dummy = new ListNode(0);
+        while (head != null) {
+            ListNode temp = head.next;
+            head.next = dummy.next;
+            dummy.next = head;
+            head = temp;
+        }
+        return dummy.next;
+    }
+    
+    private ListNode mergeList(ListNode listA, ListNode listB) {
+        // 已知 listB 比 listA 短一 或 相等
+        ListNode dummy = new ListNode(0);
+        ListNode tail = dummy;
+        while (listA != null && listB != null) {
+            tail.next = listA;
+            tail = tail.next;
+            listA = listA.next;
+            tail.next = listB;
+            tail = tail.next;
+            listB = listB.next;
+        }
+        if (listA != null) {
+            tail.next = listA;
         }
         return dummy.next;
     }
