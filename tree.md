@@ -9,24 +9,7 @@
 Given a binary tree, return the level order traversal of its nodes' values. (ie, from left to right, level by level).
 
 ```java
-/**
- * Definition of TreeNode:
- * public class TreeNode {
- *     public int val;
- *     public TreeNode left, right;
- *     public TreeNode(int val) {
- *         this.val = val;
- *         this.left = this.right = null;
- *     }
- * }
- */
- 
- 
 public class Solution {
-    /**
-     * @param root: The root of binary tree.
-     * @return: Level order a list of lists of integer
-     */
     public ArrayList<ArrayList<Integer>> levelOrder(TreeNode root) {
         // 2015-3-22 BFS
         ArrayList<ArrayList<Integer>> rst = new ArrayList<>();
@@ -61,24 +44,7 @@ public class Solution {
 https://www.lintcode.com/problem/binary-tree-level-order-traversal-ii/description
 
 ```java
-/**
- * Definition of TreeNode:
- * public class TreeNode {
- *     public int val;
- *     public TreeNode left, right;
- *     public TreeNode(int val) {
- *         this.val = val;
- *         this.left = this.right = null;
- *     }
- * }
- */
- 
- 
 public class Solution {
-    /**
-     * @param root: The root of binary tree.
-     * @return: buttom-up level order a list of lists of integer
-     */
     public ArrayList<ArrayList<Integer>> levelOrderButtom(TreeNode root) {
         // 2015-3-26 BFS
         ArrayList<ArrayList<Integer>> rst = new ArrayList<>();
@@ -115,25 +81,7 @@ public class Solution {
 https://www.lintcode.com/problem/binary-tree-zigzag-level-order-traversal/description
 
 ```java
-/**
- * Definition of TreeNode:
- * public class TreeNode {
- *     public int val;
- *     public TreeNode left, right;
- *     public TreeNode(int val) {
- *         this.val = val;
- *         this.left = this.right = null;
- *     }
- * }
- */
- 
- 
 public class Solution {
-    /**
-     * @param root: The root of binary tree.
-     * @return: A list of lists of integer include 
-     *          the zigzag level order traversal of its nodes' values 
-     */
     public ArrayList<ArrayList<Integer>> zigzagLevelOrder(TreeNode root) {
         // 2015-3-26 BFS
         ArrayList<ArrayList<Integer>> rst = new ArrayList<>();
@@ -170,7 +118,6 @@ public class Solution {
 }
 ```
 
-
 ---
 
 ## 二叉树遍历
@@ -185,25 +132,20 @@ public class Solution {
 
 ## 前序遍历 Binary Tree Preorder Traversal
 
-[[LintCode]Binary Tree Preorder Traversal](https://www.lintcode.com/problem/binary-tree-preorder-traversal/description)
+https://leetcode-cn.com/problems/binary-tree-preorder-traversal/
+
+```python
+class Solution:
+    def preorderTraversal(self, root: TreeNode) -> List[int]:
+        if not root:
+            return []
+        left = self.preorderTraversal(root.left)
+        right = self.preorderTraversal(root.right)
+        return [root.val] + left + right
+```
 
 ```java
-/**
- * Definition of TreeNode:
- * public class TreeNode {
- *     public int val;
- *     public TreeNode left, right;
- *     public TreeNode(int val) {
- *         this.val = val;
- *         this.left = this.right = null;
- *     }
- * }
- */
 public class Solution {
-    /**
-     * @param root: The root of binary tree.
-     * @return: Preorder in ArrayList which contains node values.
-     */
     public ArrayList<Integer> preorderTraversal(TreeNode root) {
         // 2015-3-22 DFS
         ArrayList<Integer> rst = new ArrayList<>();
@@ -224,27 +166,22 @@ public class Solution {
 
 ## 中序遍历 Binary Tree Inorder Traversal
 
-[[LintCode]Binary Tree Inorder Traversal](https://www.lintcode.com/problem/binary-tree-inorder-traversal/description)
+https://leetcode-cn.com/problems/binary-tree-inorder-traversal/
 
 VERSION I Divide & Conquer
 
+```python
+class Solution:
+    def inorderTraversal(self, root: TreeNode) -> List[int]:
+        if not root:
+            return []
+        left = self.inorderTraversal(root.left)
+        right = self.inorderTraversal(root.right)
+        return left + [root.val] + right
+```
+
 ```java
-/**
- * Definition of TreeNode:
- * public class TreeNode {
- *     public int val;
- *     public TreeNode left, right;
- *     public TreeNode(int val) {
- *         this.val = val;
- *         this.left = this.right = null;
- *     }
- * }
- */
 public class Solution {
-    /**
-     * @param root: The root of binary tree.
-     * @return: Inorder in ArrayList which contains node values.
-     */
     public ArrayList<Integer> inorderTraversal(TreeNode root) {
         // 2015-3-22 DFS
         ArrayList<Integer> rst = new ArrayList<>();
@@ -269,22 +206,7 @@ public class Solution {
 VERSION II Recursion
 
 ```java
-/**
- * Definition of TreeNode:
- * public class TreeNode {
- *     public int val;
- *     public TreeNode left, right;
- *     public TreeNode(int val) {
- *         this.val = val;
- *         this.left = this.right = null;
- *     }
- * }
- */
 public class Solution {
-    /**
-     * @param root: The root of binary tree.
-     * @return: Inorder in ArrayList which contains node values.
-     */
     public ArrayList<Integer> inorderTraversal(TreeNode root) {
         // 2015-4-1 recursion
         ArrayList<Integer> rst = new ArrayList<>();
@@ -303,25 +225,20 @@ public class Solution {
 
 ## 后续遍历 Binary Tree Postorder Traversal
 
-[[LintCode]Binary Tree Postorder Traversal](https://www.lintcode.com/problem/binary-tree-postorder-traversal/)
+https://leetcode-cn.com/problems/binary-tree-postorder-traversal/
+
+```python
+class Solution:
+    def postorderTraversal(self, root: TreeNode) -> List[int]:
+        if not root:
+            return []
+        left = self.postorderTraversal(root.left)
+        right = self.postorderTraversal(root.right)
+        return left + right + [root.val]
+```
 
 ```java
-/**
- * Definition of TreeNode:
- * public class TreeNode {
- *     public int val;
- *     public TreeNode left, right;
- *     public TreeNode(int val) {
- *         this.val = val;
- *         this.left = this.right = null;
- *     }
- * }
- */
 public class Solution {
-    /**
-     * @param root: The root of binary tree.
-     * @return: Postorder in ArrayList which contains node values.
-     */
     public ArrayList<Integer> postorderTraversal(TreeNode root) {
         // 2015-3-22
         ArrayList<Integer> rst = new ArrayList<>();
@@ -350,25 +267,7 @@ https://www.lintcode.com/problem/construct-binary-tree-from-preorder-and-inorder
 Given preorder and inorder traversal of a tree, construct the binary tree.
 
 ```java
-/**
- * Definition of TreeNode:
- * public class TreeNode {
- *     public int val;
- *     public TreeNode left, right;
- *     public TreeNode(int val) {
- *         this.val = val;
- *         this.left = this.right = null;
- *     }
- * }
- */
- 
- 
 public class Solution {
-    /**
-     *@param preorder : A list of integers that preorder traversal of a tree
-     *@param inorder : A list of integers that inorder traversal of a tree
-     *@return : Root of a tree
-     */
     public TreeNode buildTree(int[] preorder, int[] inorder) {
         // 2015-07-22 递归 算清楚左右分支各有几个节点很关键
         if (preorder == null || inorder == null || preorder.length == 0 || inorder.length == 0) {
@@ -422,23 +321,7 @@ Given a binary tree, find the maximum path sum.
 The path may start and end at any node in the tree.
 
 ```java
-/**
- * Definition of TreeNode:
- * public class TreeNode {
- *     public int val;
- *     public TreeNode left, right;
- *     public TreeNode(int val) {
- *         this.val = val;
- *         this.left = this.right = null;
- *     }
- * }
- */
 public class Solution {
-    /**
-     * @param root: The root of binary tree.
-     * @return: An integer.
-     */
-    
     private class RstType {
         int maxPath;
         int singlePath;
@@ -483,22 +366,7 @@ Given a binary tree, find its maximum depth.
 The maximum depth is the number of nodes along the longest path from the root node down to the farthest leaf node.
 
 ```java
-/**
- * Definition of TreeNode:
- * public class TreeNode {
- *     public int val;
- *     public TreeNode left, right;
- *     public TreeNode(int val) {
- *         this.val = val;
- *         this.left = this.right = null;
- *     }
- * }
- */
 public class Solution {
-    /**
-     * @param root: The root of binary tree.
-     * @return: An integer.
-     */
     public int maxDepth(TreeNode root) {
         // 2015-3-23 DFS
         if (root == null) {
@@ -524,22 +392,7 @@ Given a binary tree, determine if it is height-balanced.
 
 
 ```java
-/**
- * Definition of TreeNode:
- * public class TreeNode {
- *     public int val;
- *     public TreeNode left, right;
- *     public TreeNode(int val) {
- *         this.val = val;
- *         this.left = this.right = null;
- *     }
- * }
- */
 public class Solution {
-    /**
-     * @param root: The root of binary tree.
-     * @return: True if this Binary tree is Balanced, or false.
-     */
     public boolean isBalanced(TreeNode root) {
         // 2015-3-23
         return doRecursion(root) != -1;
@@ -572,23 +425,7 @@ public class Solution {
 https://www.lintcode.com/problem/lowest-common-ancestor-of-a-binary-tree/description
 
 ```java
-/**
- * Definition of TreeNode:
- * public class TreeNode {
- *     public int val;
- *     public TreeNode left, right;
- *     public TreeNode(int val) {
- *         this.val = val;
- *         this.left = this.right = null;
- *     }
- * }
- */
 public class Solution {
-    /**
-     * @param root: The root of the binary search tree. 不需要是 binary search tree
-     * @param A and B: two nodes in a Binary.
-     * @return: Return the least common ancestor(LCA) of the two nodes.
-     */
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode A, TreeNode B) {
         // 2015-3-23 DFS
         if (root == null || A == null || B == null) {
@@ -618,32 +455,39 @@ public class Solution {
 
 ---
 
-## Binary Search Tree
+## Binary Search Tree BST
 
 https://blog.csdn.net/willshine19/article/category/3066953
+
+### 783. Minimum Distance Between BST Nodes
+
+https://leetcode-cn.com/problems/minimum-distance-between-bst-nodes/
+
+```python
+class Solution:
+    def minDiffInBST(self, root: TreeNode) -> int:
+
+        def inorder(node):
+            if not node:
+                return 
+            nonlocal res, pre
+            inorder(node.left)
+            res = min(res, node.val - pre)
+            pre = node.val
+            inorder(node.right)
+        pre = -99999
+        res = 99999
+
+        inorder(root)
+        return res
+```
 
 ### Insert Node in a Binary Search Tree
 
 https://www.lintcode.com/problem/insert-node-in-a-binary-search-tree/description
 
 ```java
-/**
- * Definition of TreeNode:
- * public class TreeNode {
- *     public int val;
- *     public TreeNode left, right;
- *     public TreeNode(int val) {
- *         this.val = val;
- *         this.left = this.right = null;
- *     }
- * }
- */
 public class Solution {
-    /**
-     * @param root: The root of the binary search tree.
-     * @param node: insert this node into the binary search tree
-     * @return: The root of the new binary search tree.
-     */
     public TreeNode insertNode(TreeNode root, TreeNode node) {
         // 2015-3-30
         if (node == null) {
@@ -685,23 +529,7 @@ public class Solution {
 https://www.lintcode.com/problem/search-range-in-binary-search-tree/description
 
 ```java
-/**
- * Definition of TreeNode:
- * public class TreeNode {
- *     public int val;
- *     public TreeNode left, right;
- *     public TreeNode(int val) {
- *         this.val = val;
- *         this.left = this.right = null;
- *     }
- * }
- */
 public class Solution {
-    /**
-     * @param root: The root of the binary search tree.
-     * @param k1 and k2: range k1 to k2.
-     * @return: Return all keys that k1<=key<=k2 in ascending order.
-     */
     public ArrayList<Integer> searchRange(TreeNode root, int k1, int k2) {
         // 2015-3-30
         ArrayList<Integer> rst = new ArrayList<>();
@@ -725,24 +553,8 @@ public class Solution {
 ```
 
 ```java
-/**
- * Definition of TreeNode:
- * public class TreeNode {
- *     public int val;
- *     public TreeNode left, right;
- *     public TreeNode(int val) {
- *         this.val = val;
- *         this.left = this.right = null;
- *     }
- * }
- */
 public class Solution {
     private ArrayList<Integer> results;
-    /**
-     * @param root: The root of the binary search tree.
-     * @param k1 and k2: range k1 to k2.
-     * @return: Return all keys that k1<=key<=k2 in increasing order.
-     */
     public ArrayList<Integer> searchRange(TreeNode root, int k1, int k2) {
         results = new ArrayList<Integer>();
         helper(root, k1, k2);
@@ -771,23 +583,7 @@ public class Solution {
 https://www.lintcode.com/problem/remove-node-in-binary-search-tree/description
 
 ```java
-/**
- * Definition of TreeNode:
- * public class TreeNode {
- *     public int val;
- *     public TreeNode left, right;
- *     public TreeNode(int val) {
- *         this.val = val;
- *         this.left = this.right = null;
- *     }
- * }
- */
 public class Solution {
-    /**
-     * @param root: The root of the binary search tree.
-     * @param value: Remove the node with given value.
-     * @return: The root of the binary search tree after removal.
-     */
     private TreeNode lastNode;
     private TreeNode targetNode;
  
@@ -869,17 +665,6 @@ public class Solution {
 https://www.lintcode.com/problem/validate-binary-search-tree/description
 
 ```java
-/**
- * Definition of TreeNode:
- * public class TreeNode {
- *     public int val;
- *     public TreeNode left, right;
- *     public TreeNode(int val) {
- *         this.val = val;
- *         this.left = this.right = null;
- *     }
- * }
- */
 public class Solution {
     /**
      * @param root: The root of binary tree.
@@ -916,31 +701,7 @@ public class Solution {
 https://www.lintcode.com/problem/convert-sorted-list-to-binary-search-tree/description
 
 ```java
-/**
- * Definition for ListNode.
- * public class ListNode {
- *     int val;
- *     ListNode next;
- *     ListNode(int val) {
- *         this.val = val;
- *         this.next = null;
- *     }
- * }
- * Definition of TreeNode:
- * public class TreeNode {
- *     public int val;
- *     public TreeNode left, right;
- *     public TreeNode(int val) {
- *         this.val = val;
- *         this.left = this.right = null;
- *     }
- * }
- */ 
 public class Solution {
-    /**
-     * @param head: The first node of linked list.
-     * @return: a tree node
-     */
     public TreeNode sortedListToBST(ListNode head) {  
         // 2015-08-19
         if (head == null) {
@@ -1012,13 +773,8 @@ mid.next = null
 
 https://www.lintcode.com/problem/inorder-successor-in-bst/description
 
-```
+```java
 public class Solution {
-    /**
-     * @param A: An integer array
-     * @param target: An integer
-     * @return : An integer which is the index of the target number
-     */
     public int searchBigSortedArray(int[] A, int target) {
         // 2015-10-13
         if (A == null || A.length == 0) {
