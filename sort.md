@@ -119,3 +119,29 @@ public class Solution {
     }
 }
 ```
+
+## 283. Move Zeroes
+
+https://leetcode-cn.com/problems/move-zeroes/
+
+```python
+class Solution:
+    def moveZeroes(self, nums: List[int]) -> None:
+        left = right = 0
+        ln = len(nums)
+        
+        for left, val in enumerate(nums):
+            if val != 0:
+                continue
+
+            if left >= right:
+                right = left + 1
+            
+            while right < ln and nums[right] == 0: 
+                right += 1
+            if right == ln: return
+
+            nums[left] = nums[right]
+            nums[right] = 0
+            right += 1
+```

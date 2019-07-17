@@ -1,10 +1,10 @@
 # Tree
 
-## 层序遍历
+## 广度优先遍历 BFS
 
 ### Binary Tree Level Order Traversal
 
-[[LintCode]Binary Tree Level Order Traversal](https://www.lintcode.com/problem/binary-tree-level-order-traversal/)
+https://leetcode-cn.com/problems/binary-tree-level-order-traversal/
 
 Given a binary tree, return the level order traversal of its nodes' values. (ie, from left to right, level by level).
 
@@ -120,25 +120,26 @@ public class Solution {
 
 ---
 
-## 二叉树遍历
+## 深度优先遍历 DFS 
 
-前序遍历：根结点 ---> 左子树 ---> 右子树
+前序遍历: 根结点 ---> 左子树 ---> 右子树
 
-中序遍历：左子树---> 根结点 ---> 右子树
+中序遍历: 左子树 ---> 根结点 ---> 右子树
 
-后序遍历：左子树 ---> 右子树 ---> 根结点
+后序遍历: 左子树 ---> 右子树 ---> 根结点
 
-层次遍历：只需按层次遍历即可
+![](https://pic.leetcode-cn.com/071065c80aaf44da930c7ccb2156b3eac6309d446eb36a376d6478d17cc2400f-102.png)
 
-## 前序遍历 Binary Tree Preorder Traversal
+## 前序遍历 144. Binary Tree Preorder Traversal
 
 https://leetcode-cn.com/problems/binary-tree-preorder-traversal/
+
+Version 1 递归
 
 ```python
 class Solution:
     def preorderTraversal(self, root: TreeNode) -> List[int]:
-        if not root:
-            return []
+        if not root: return []
         left = self.preorderTraversal(root.left)
         right = self.preorderTraversal(root.right)
         return [root.val] + left + right
@@ -164,6 +165,10 @@ public class Solution {
 }
 ```
 
+Version 2 迭代
+
+
+
 ## 中序遍历 Binary Tree Inorder Traversal
 
 https://leetcode-cn.com/problems/binary-tree-inorder-traversal/
@@ -173,8 +178,7 @@ VERSION I Divide & Conquer
 ```python
 class Solution:
     def inorderTraversal(self, root: TreeNode) -> List[int]:
-        if not root:
-            return []
+        if not root: return []
         left = self.inorderTraversal(root.left)
         right = self.inorderTraversal(root.right)
         return left + [root.val] + right
@@ -230,8 +234,7 @@ https://leetcode-cn.com/problems/binary-tree-postorder-traversal/
 ```python
 class Solution:
     def postorderTraversal(self, root: TreeNode) -> List[int]:
-        if not root:
-            return []
+        if not root: return []
         left = self.postorderTraversal(root.left)
         right = self.postorderTraversal(root.right)
         return left + right + [root.val]
@@ -282,7 +285,7 @@ public class Solution {
     // 递归helper start和end表示子数组首尾元素的序号
     private TreeNode helper(int[] preorder, int prestart, int preend, int[] inorder, int instart, int inend) {
         
-        //叶节点
+        // 叶节点
         if (prestart > preend) {
             return null;
         }

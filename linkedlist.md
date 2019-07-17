@@ -423,7 +423,7 @@ https://leetcode-cn.com/problems/remove-nth-node-from-end-of-list/
 ```python
 class Solution:
     def removeNthFromEnd(self, head: ListNode, n: int) -> ListNode:
-        // 2019.7.8
+        # 2019.7.8
         dummy = ListNode(0)
         dummy.next = head
         fast = head
@@ -470,8 +470,6 @@ public class Solution {
 ### 61. Rotate List
 
 https://leetcode-cn.com/problems/rotate-list/
-
-https://www.lintcode.com/problem/rotate-list/description
 
 Given a linked list, rotate the list to the right by k places, where k is non-negative.
 
