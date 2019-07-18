@@ -8,6 +8,22 @@ https://leetcode-cn.com/problems/binary-tree-level-order-traversal/
 
 Given a binary tree, return the level order traversal of its nodes' values. (ie, from left to right, level by level).
 
+```python
+class Solution:
+    def levelOrder(self, root: TreeNode) -> List[List[int]]:
+        rst, left = [], []
+        if root: left.append(root)
+        while left:
+            level = []
+            for i in range(len(left)):
+                node = left.pop(0)
+                level.append(node.val)
+                if node.left: left.append(node.left)
+                if node.right: left.append(node.right)
+            rst.append(level)
+        return rst
+```
+
 ```java
 public class Solution {
     public ArrayList<ArrayList<Integer>> levelOrder(TreeNode root) {
@@ -41,7 +57,23 @@ public class Solution {
 
 ### Binary Tree Level Order Traversal II
 
-https://www.lintcode.com/problem/binary-tree-level-order-traversal-ii/description
+https://leetcode-cn.com/problems/binary-tree-level-order-traversal-ii/
+
+```python
+class Solution:
+    def levelOrderBottom(self, root: TreeNode) -> List[List[int]]:
+        rst, left = [], []
+        if root: left.append(root)
+        while left:
+            level = []
+            for i in range(len(left)):
+                node = left.pop(0)
+                level.append(node.val)
+                if node.left: left.append(node.left)
+                if node.right: left.append(node.right)
+            rst.insert(0, level)
+        return rst
+```
 
 ```java
 public class Solution {
@@ -78,7 +110,7 @@ public class Solution {
 
 ### Binary Tree Zigzag Level Order Traversal
 
-https://www.lintcode.com/problem/binary-tree-zigzag-level-order-traversal/description
+https://leetcode-cn.com/problems/binary-tree-zigzag-level-order-traversal/
 
 ```java
 public class Solution {
@@ -173,8 +205,6 @@ Version 2 迭代
 
 https://leetcode-cn.com/problems/binary-tree-inorder-traversal/
 
-VERSION I Divide & Conquer
-
 ```python
 class Solution:
     def inorderTraversal(self, root: TreeNode) -> List[int]:
@@ -201,26 +231,6 @@ public class Solution {
         rst.addAll(left);
         rst.add(root.val);
         rst.addAll(right);
-        
-        return rst;
-    }
-}
-```
-
-VERSION II Recursion
-
-```java
-public class Solution {
-    public ArrayList<Integer> inorderTraversal(TreeNode root) {
-        // 2015-4-1 recursion
-        ArrayList<Integer> rst = new ArrayList<>();
-        if (root == null) {
-            return rst;
-        }
-        
-        rst.addAll(inorderTraversal(root.left));
-        rst.add(root.val);
-        rst.addAll(inorderTraversal(root.right));
         
         return rst;
     }
@@ -362,7 +372,6 @@ public class Solution {
 ## Maximum Depth of Binary Tree
 
 [LintCode](https://www.lintcode.com/problem/maximum-depth-of-binary-tree/)
-
 
 Given a binary tree, find its maximum depth.
 

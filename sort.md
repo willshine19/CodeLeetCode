@@ -1,3 +1,8 @@
+# sort
+
+快速排序 https://blog.csdn.net/willshine19/article/details/52565739
+
+归并排序 https://blog.csdn.net/willshine19/article/details/52663843
 
 ### 148. Sort List
 
