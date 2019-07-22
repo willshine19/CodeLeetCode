@@ -1,8 +1,92 @@
 # sort
 
+### Quick Sort
+
 快速排序 https://blog.csdn.net/willshine19/article/details/52565739
 
+```python
+def quick_sort(collection):
+    length = len(collection)
+    if length <= 1:
+        return collection
+    else:
+        pivot = collection.pop()
+        greater, lesser = [], []
+        for element in collection:
+            if element > pivot:
+                greater.append(element)
+            else:
+                lesser.append(element)
+        return quick_sort(lesser) + [pivot] + quick_sort(greater)
+
+```
+
+```java
+private static void quickSort(int[] array, int start, int end) {
+    if (start < end) {
+        int mid = partition(array, start, end);
+        quickSort(array, start, mid - 1);
+        quickSort(array, mid + 1, end);
+    }
+}
+
+private static int partition(int[] src, int start, int end) {
+    int target = src[start];
+    while (start < end) {
+        while (start < end && src[end] >= target) {
+            end--;
+        }
+        src[start] = src[end];
+        while (start < end && src[start] <= target) {
+            start++;
+        }
+        src[end] = src[start];
+    }
+    // 此时 start == end
+    src[start] = target;
+    return start;
+}
+```
+
+### Merge Sort
+
 归并排序 https://blog.csdn.net/willshine19/article/details/52663843
+
+```python
+def merge_sort(collection):
+    def merge(left, right):
+        result = []
+        while left and right:
+            result.append((left if left[0] <= right[0] else right).pop(0))
+        return result + left + right
+    if len(collection) <= 1:
+        return collection
+    mid = len(collection) // 2
+    return merge(merge_sort(collection[:mid]), merge_sort(collection[mid:]))
+```
+
+### Bubble Sort
+
+```python
+def bubble_sort(collection):
+    length = len(collection)
+    for i in range(length-1):
+        swapped = False
+        for j in range(length-1-i):
+            if collection[j] > collection[j+1]:
+                swapped = True
+                collection[j], collection[j+1] = collection[j+1], collection[j]
+        if not swapped: break  # Stop iteration if the collection is sorted.
+    return collection
+```
+
+### 912 Sort an Array
+
+https://leetcode-cn.com/problems/sort-an-array/
+
+
+```python
+```
 
 ### 148. Sort List
 
@@ -95,7 +179,7 @@ public class Solution {
 
 ### Insertion Sort List
 
-https://www.lintcode.com/problem/insertion-sort-list/description
+https://leetcode-cn.com/problems/insertion-sort-list/
 
 ```java
 public class Solution {

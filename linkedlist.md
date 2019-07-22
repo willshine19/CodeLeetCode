@@ -266,8 +266,6 @@ class Solution:
 
 ### 92. Reverse Linked List II
 
-https://www.lintcode.com/problem/reverse-linked-list-ii/description
-
 https://leetcode-cn.com/problems/reverse-linked-list-ii/
 
 Input: 1->2->3->4->5->NULL, m = 2 and n = 4, 
@@ -413,8 +411,6 @@ public class Solution {
 ```
 
 ### 19. Remove Nth Node From End of List
-
-https://www.lintcode.com/problem/remove-nth-node-from-end-of-list/description
 
 https://leetcode-cn.com/problems/remove-nth-node-from-end-of-list/
 

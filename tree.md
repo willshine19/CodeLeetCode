@@ -273,9 +273,151 @@ public class Solution {
 }
 ```
 
+## Maximum Depth of Binary Tree
+
+https://leetcode-cn.com/problems/maximum-depth-of-binary-tree/
+
+Given a binary tree, find its maximum depth.
+
+The maximum depth is the number of nodes along the longest path from the root node down to the farthest leaf node.
+
+```python
+class Solution:
+    def maxDepth(self, root: TreeNode) -> int:
+        if not root:
+            return 0
+        left_max = self.maxDepth(root.left)
+        right_max = self.maxDepth(root.right)
+        return max(left_max, right_max) + 1
+```
+
+```java
+public class Solution {
+    public int maxDepth(TreeNode root) {
+        // 2015-3-23 DFS
+        if (root == null) {
+        	return 0;
+        }
+ 
+        // divide 
+        int left  = maxDepth(root.left);
+        int right = maxDepth(root.right);
+ 
+        // conquer
+        return Math.max(left, right) + 1;
+    }
+}
+```
+
+## Balanced Binary Tree
+
+[LintCode](https://www.lintcode.com/problem/balanced-binary-tree/description)
+
+Given a binary tree, determine if it is height-balanced.
+
+```python
+class Solution:
+    def getDepth(self, root: TreeNode) -> int:
+        if not root:
+            return 0
+        left = self.getDepth(root.left)
+        right = self.getDepth(root.right)
+        if left == -1 or right == -1:
+            return -1
+        if left - right > 1 or right - left > 1:
+            return -1
+        return max(left, right) + 1
+    
+    def isBalanced(self, root: TreeNode) -> bool:
+        return False if self.getDepth(root) == -1 else True
+```
+
+```java
+public class Solution {
+    public boolean isBalanced(TreeNode root) {
+        // 2015-3-23
+        return doRecursion(root) != -1;
+    }
+ 
+    // return 深度, -1 表示非平衡
+    private int doRecursion(TreeNode root) {
+    	if (root == null) {
+    		return 0;
+    	}
+ 
+    	// divide
+    	int left = doRecursion(root.left);
+    	int right = doRecursion(root.right);
+ 
+    	// conquer
+    	if (left == -1 || right == -1) {
+    		return -1;
+    	}
+    	if  (Math.abs(left - right) > 1) {
+    		return -1;
+    	}
+    	return Math.max(left, right) + 1;
+    }
+}
+```
+
+## Lowest Common Ancestor
+
+https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-tree/
+
+```python
+class Solution:
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        if not root:
+            return None
+        if root == p or root == q:
+            return root
+        
+        left = self.lowestCommonAncestor(root.left, p, q)
+        right = self.lowestCommonAncestor(root.right, p, q)
+        
+        if left and right:
+            return root
+        if left:
+            return left
+        if right:
+            return right
+        return None
+        
+```
+
+```java
+public class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode A, TreeNode B) {
+        // 2015-3-23 DFS
+        if (root == null || A == null || B == null) {
+            return null;
+        }
+        if (root == A || root == B) {
+            return root;
+        }
+        
+        // divide
+        TreeNode left = lowestCommonAncestor(root.left, A, B);
+        TreeNode right = lowestCommonAncestor(root.right, A, B);
+        
+        // conquer
+        if (left != null && right != null) {
+            return root;
+        } else if (left != null) {
+            return left;
+        } else if (right != null) {
+            return right;
+        } else {
+            return null;
+        }
+    }
+}
+```
+
 ### Construct Binary Tree from Preorder and Inorder Traversal
 
-https://www.lintcode.com/problem/construct-binary-tree-from-preorder-and-inorder-traversal/description
+https://leetcode-cn.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/
 
 Given preorder and inorder traversal of a tree, construct the binary tree.
 
@@ -292,7 +434,7 @@ public class Solution {
         return helper(preorder, 0, preorder.length - 1, inorder, 0, inorder.length - 1);
     }
     
-    // 递归helper start和end表示子数组首尾元素的序号
+    // 递归 helper start 和 end 表示子数组首尾元素的序号
     private TreeNode helper(int[] preorder, int prestart, int preend, int[] inorder, int instart, int inend) {
         
         // 叶节点
@@ -302,9 +444,9 @@ public class Solution {
         
         TreeNode root = new TreeNode(preorder[prestart]);
         int pos = findPostion(inorder, instart, inend, preorder[prestart]);
-        // 左分支有pos - instart个节点
+        // 左分支有 pos - instart 个节点
         root.left = helper(preorder, prestart + 1, prestart + pos - instart, inorder, instart, pos - 1);
-        // 右分支有inend - pos个节点
+        // 右分支有 inend - pos 个节点
         root.right = helper(preorder, prestart + pos - instart + 1, preend, inorder, pos + 1, inend);
         return root;
     }
@@ -326,7 +468,7 @@ public class Solution {
 
 ## Binary Tree Maximum Path Sum 
 
-[LintCode](https://www.lintcode.com/problem/binary-tree-maximum-path-sum/description)
+https://leetcode-cn.com/problems/binary-tree-maximum-path-sum/
 
 难度: 3 很有可能会出错
 
@@ -365,102 +507,6 @@ public class Solution {
         // 2015-3-23
         RstType rst = doRecursion(root);
         return rst.maxPath;
-    }
-}
-```
-
-## Maximum Depth of Binary Tree
-
-[LintCode](https://www.lintcode.com/problem/maximum-depth-of-binary-tree/)
-
-Given a binary tree, find its maximum depth.
-
-The maximum depth is the number of nodes along the longest path from the root node down to the farthest leaf node.
-
-```java
-public class Solution {
-    public int maxDepth(TreeNode root) {
-        // 2015-3-23 DFS
-        if (root == null) {
-        	return 0;
-        }
- 
-        // divide 
-        int left  = maxDepth(root.left);
-        int right = maxDepth(root.right);
- 
-        // conquer
-        return Math.max(left, right) + 1;
-    }
-}
- 
-```
-
-## Balanced Binary Tree
-
-[LintCode](https://www.lintcode.com/problem/balanced-binary-tree/description)
-
-Given a binary tree, determine if it is height-balanced.
-
-
-```java
-public class Solution {
-    public boolean isBalanced(TreeNode root) {
-        // 2015-3-23
-        return doRecursion(root) != -1;
-    }
- 
-    // return 深度, -1 表示非平衡
-    private int doRecursion(TreeNode root) {
-    	if (root == null) {
-    		return 0;
-    	}
- 
-    	// divide
-    	int left = doRecursion(root.left);
-    	int right = doRecursion(root.right);
- 
-    	// conquer
-    	if (left == -1 || right == -1) {
-    		return -1;
-    	}
-    	if  (Math.abs(left - right) > 1) {
-    		return -1;
-    	}
-    	return Math.max(left, right) + 1;
-    }
-}
-```
-
-## Lowest Common Ancestor
-
-https://www.lintcode.com/problem/lowest-common-ancestor-of-a-binary-tree/description
-
-```java
-public class Solution {
-    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode A, TreeNode B) {
-        // 2015-3-23 DFS
-        if (root == null || A == null || B == null) {
-            return null;
-        }
-        if (root == A || root == B) {
-            return root;
-        }
-        
-        // divide
-        TreeNode left = lowestCommonAncestor(root.left, A, B);
-        TreeNode right = lowestCommonAncestor(root.right, A, B);
-        
-        // conquer
-        if (left != null && right != null) {
-            return root;
-        } else if (left != null) {
-            return left;
-        } else if (right != null) {
-            return right;
-        } else {
-            return null;
-        }
     }
 }
 ```
