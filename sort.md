@@ -209,3 +209,174 @@ public class Solution {
 }
 ```
 
+## 283. Move Zeroes
+
+https://leetcode-cn.com/problems/move-zeroes/
+
+Version 1
+
+```python
+class Solution:
+    def moveZeroes(self, nums: List[int]) -> None:
+        # left 第一个 0
+        # right 是 left 后面第一个非0
+        left = right = 0
+        ln = len(nums)
+        
+        for left, val in enumerate(nums):
+            if val != 0:
+                continue
+            # 找到了 left
+
+            if left >= right:
+                right = left + 1
+            
+            while right < ln and nums[right] == 0: 
+                right += 1
+            if right == ln: return
+            # 找到了 right
+            
+            nums[left] = nums[right]
+            nums[right] = 0
+            right += 1
+```
+
+Version 2
+
+```python
+class Solution:
+    def moveZeroes(self, nums: List[int]) -> None:
+        pos = 0
+        for num in nums:
+            if num != 0: nums[pos] = num; pos += 1
+        while pos < len(nums):
+            nums[pos] = 0; pos += 1
+```
+
+## 75. Sort Colors
+
+medium https://leetcode-cn.com/problems/sort-colors/
+
+Version 1 O(n) 遍历两次
+
+```java
+class Solution {
+    public void sortColors(int[] nums) {
+        // 2015-09-15
+        if (nums == null || nums.length == 0) {
+            return;
+        }
+        
+        int count0 = 0;
+        int count1 = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] == 0) {
+                count0++;
+            } else if (nums[i] == 1) {
+                count1++;
+            }
+        }
+        
+        for (int i = 0; i < nums.length; i++) {
+            if (count0 > 0) {
+                nums[i] = 0;
+                count0--;
+            } else if (count1 > 0) {
+                nums[i] = 1;
+                count1--;
+            } else {
+                nums[i] = 2;
+            }
+        }
+        
+        return;
+    }
+}
+```
+
+Version 2 遍历1次
+
+```java
+class Solution {
+    public void sortColors(int[] nums) {
+        // 2015-09-15 O(n)
+        if(nums == null || nums.length <= 1)
+            return;
+        
+        // pl 指向0后一个数
+        int pl = 0;
+        // pr 指向2前一个数
+        int pr = nums.length - 1;
+        int i = 0;
+        while(i <= pr){
+            if(nums[i] == 0){
+                // 遇到0 换到前面
+                swap(nums, pl, i);
+                pl++;
+                i++;
+            }else if(nums[i] == 1){
+                i++;
+            }else{
+                // 遇到2 换到后面
+                swap(nums, pr, i);
+                pr--;
+            }
+        }
+    }
+    
+    private void swap(int[] a, int i, int j) {
+        if (i == j) {
+            return;
+        }
+        int tmp = a[i];
+        a[i] = a[j];
+        a[j] = tmp;
+    }
+}
+```
+
+## Partition Array
+
+https://www.lintcode.com/problem/partition-array/description
+
+Given an array nums of integers and an int k, partition the array (i.e move the elements in "nums") such that:
+
+All elements < k are moved to the left
+All elements >= k are moved to the right
+
+```java
+public class Solution {
+    public int partitionArray(int[] nums, int k) {
+	    // 2015-09-23 O(n) 
+	    // 注意所有元素小于 k 的情况
+	    if (nums == null || nums.length < 1) {
+	        return 0;
+	    }
+	    
+	    int start = 0;
+	    int end = nums.length - 1;
+	    while (start < end) {
+	        if (nums[start] < k) {
+	            start++;
+	        } else if (nums[end] >= k) {
+	            end--;
+	        } else {
+	            swap(nums, start, end);
+	            start++;
+	        }
+	    }
+	    // 此时 start = end
+	    if (nums[start] < k) {
+	        return start + 1;
+	    } else {
+	        return start;
+	    }
+    }
+    
+    private void swap(int[] nums, int start, int end) {
+        int temp = nums[start];
+        nums[start] = nums[end];
+        nums[end] = temp;
+    }
+}
+```
