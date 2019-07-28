@@ -1,128 +1,111 @@
-# array
+# Array
 
-## 1089. Duplicate Zeros
+[TOC]
 
-https://leetcode-cn.com/problems/duplicate-zeros/
+## 1. Two Sum
 
-```
-Input: [1,0,2,3,0,4,5,0]
-Output: null
-Explanation: After calling your function, the input array is modified to: [1,0,0,2,3,0,0,4]
-```
+Easy https://leetcode-cn.com/problems/two-sum/
+
+Given an array of integers, return indices of the two numbers such that they add up to a specific target.
+
+You may assume that each input would have exactly one solution, and you may not use the same element twice.
+
+Version 1 暴力 O(n^2)
 
 ```python
 class Solution:
-    def duplicateZeros(self, arr: List[int]) -> None:
-        zero_count = 0
-        for val in arr:
-            if val == 0:
-                zero_count += 1
-        
-        if zero_count == 0:
-            return
-        
-        for idx in reversed(range(len(arr))):
-            if arr[idx] == 0:
-                zero_count -= 1
-                if idx + zero_count + 1 < len(arr):
-                    arr[idx + zero_count + 1] = 0
-            if idx + zero_count < len(arr):
-                arr[idx + zero_count] = arr[idx]
-                
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        # 2019.7.28
+        for i in range(len(nums)):
+            for j in range(i + 1, len(nums)):
+                if nums[i] + nums[j] == target:
+                    return [i, j]
+        else:
+            return []
 ```
 
-## Subarray Sum
+Version 2 快排 + 二分查找  时间 o(nlogn)
 
-https://www.lintcode.com/problem/subarray-sum/description
+Version 3 哈希表 时间 O(n) 空间 O(n)
 
-Given an integer array, find a subarray where the sum of numbers is zero.
-
-Version 1 
+```python
+class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        # 2019.7.28
+        d = {}
+        for i, num in enumerate(nums):
+            if target - num in d:
+                return [d[target - num], i]
+            d[num] = i
+        else:
+            return []
+```
 
 ```java
 public class Solution {
-    public ArrayList<Integer> subarraySum(int[] nums) {
-        // 2015-09-06 暴力 O(n^2)
-        ArrayList<Integer> rst = new ArrayList<>();
-        for (int i = 0; i < nums.length; i++) {
-            int sum = 0;
-            for (int j = i; j < nums.length; j++) {
-                sum += nums[j];
-                if (sum == 0) {
-                    rst.add(i);
-                    rst.add(j);
-                    return rst;
-                }
+    public int[] twoSum(int[] numbers, int target) {
+        // 2015-09-25 O(n) 时间
+        if (numbers == null || numbers.length == 0) {
+            return new int[2];
+        }
+        int[] rst = new int[2];
+        HashMap<Integer, Integer> map = new HashMap<>();
+        int count = 1;
+        for (int i = 0; i < numbers.length; i++) {
+            map.put(numbers[i], count++);
+        }
+        for (Integer temp : map.keySet()) {
+            if (map.containsKey(target - temp) 
+                && map.get(temp) != map.get(target - temp)) {
+                rst[0] = Math.min(map.get(temp), map.get(target - temp));
+                rst[1] = Math.max(map.get(temp), map.get(target - temp));
+                return rst;
             }
         }
+        return new int[2];
+    }
+}
+```
+
+## 15. 3Sum
+
+Medium https://leetcode-cn.com/problems/3sum/
+
+Given an array nums of n integers, are there elements a, b, c in nums such that a + b + c = 0? 
+
+Find **all** unique triplets in the array which gives the sum of zero.
+
+```java
+public class Solution {
+    public ArrayList<ArrayList<Integer>> threeSum(int[] numbers) {
+        // 2015-10-14 DFS 
+        ArrayList<ArrayList<Integer>> rst = new ArrayList<>();
+        if (numbers == null || numbers.length == 0) {
+            return rst;
+        }
+        Arrays.sort(numbers);
+        ArrayList<Integer> list = new ArrayList<>();
+        helper(numbers, rst, list, 0);
         return rst;
     }
-}
-```
-
-Verison 2 用哈希表降低时间复杂度
-
-```java
-public class Solution {
-    public ArrayList<Integer> subarraySum(int[] nums) {
-        // write your code here
-        int len = nums.length;
-       
-        ArrayList<Integer> ans = new ArrayList<Integer>();
-        HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
-       
-        map.put(0, -1);
-       
-        int sum = 0;
-        for (int i = 0; i < len; i++) {
-            sum += nums[i];
-           
-            if (map.containsKey(sum)) {
-                ans.add(map.get(sum) + 1);
-                ans.add(i);
-                return ans;
+    
+    private void helper(int[] numbers, ArrayList<ArrayList<Integer>> rst, 
+            ArrayList<Integer> list, int pos) {
+        if (list.size() == 3) {
+            if (list.get(0) + list.get(1) + list.get(2) == 0 
+                    && !rst.contains(list)) {
+                rst.add(new ArrayList<Integer>(list));
             }
-            
-            map.put(sum, i);
+            return;
         }
-       
-        return ans;
+        for (int i = pos; i < numbers.length; i++) {
+            list.add(numbers[i]);
+            helper(numbers, rst, list, i + 1);
+            list.remove(list.size() - 1);
+        }
     }
 }
 ```
-
-## Subarray Sum Closest
-
-Medium https://www.lintcode.com/problem/subarray-sum-closest/description
-
-Given an integer array, find a subarray with sum closest to zero.
-
-https://blog.csdn.net/willshine19/article/details/48494129
-
-## Fast Power
-
-Medium https://www.lintcode.com/problem/fast-power/description
-
-Calculate the `a ^ n % b` where `a`, `b` and `n` are all 32bit non-negative integers.
-
-https://blog.csdn.net/willshine19/article/details/48493253
-
-## Sort Letters by Case
-
-Medium https://www.lintcode.com/problem/sort-letters-by-case/
-
-Given a string which contains only letters. Sort it by lower case first and upper case second.
-
-https://blog.csdn.net/willshine19/article/details/48622531
-
-## Majority Number III
-
-Medium https://www.lintcode.com/problem/majority-number-iii/description
-
-Given an array of integers and a number k, the majority number is the number that occurs more than 1/k of the size of the array.
-
-https://blog.csdn.net/willshine19/article/details/48649743
-
 
 ## 136. Single Number
 
@@ -298,6 +281,14 @@ public class Solution {
 }
 ```
 
+## Majority Number III
+
+Medium https://www.lintcode.com/problem/majority-number-iii/description
+
+Given an array of integers and a number k, the majority number is the number that occurs more than 1/k of the size of the array.
+
+https://blog.csdn.net/willshine19/article/details/48649743
+
 ## 53. Maximum Subarray
 
 Easy https://leetcode-cn.com/problems/maximum-subarray/
@@ -450,107 +441,115 @@ Input: [3,3,5,0,0,3,1,4]
 left:  [0,0,2,2,2,3,3,4]
 right: [4,4,4,4,4,3,3,0]
 
-## 1. Two Sum
+## Subarray Sum
 
-Easy https://leetcode-cn.com/problems/two-sum/
+https://www.lintcode.com/problem/subarray-sum/description
 
-Given an array of integers, return indices of the two numbers such that they add up to a specific target.
+Given an integer array, find a subarray where the sum of numbers is zero.
 
-You may assume that each input would have exactly one solution, and you may not use the same element twice.
-
-Version 1 暴力 O(n^2)
-
-```python
-class Solution:
-    def twoSum(self, nums: List[int], target: int) -> List[int]:
-        # 2019.7.28
-        for i in range(len(nums)):
-            for j in range(i + 1, len(nums)):
-                if nums[i] + nums[j] == target:
-                    return [i, j]
-        else:
-            return []
-```
-
-Version 2 快排 + 二分查找  时间 o(nlogn)
-
-Version 3 哈希表 时间 O(n) 空间 O(n)
-
-```python
-class Solution:
-    def twoSum(self, nums: List[int], target: int) -> List[int]:
-        # 2019.7.28
-        d = {}
-        for i, num in enumerate(nums):
-            if target - num in d:
-                return [d[target - num], i]
-            d[num] = i
-        else:
-            return []
-```
+Version 1 
 
 ```java
 public class Solution {
-    public int[] twoSum(int[] numbers, int target) {
-        // 2015-09-25 O(n) 时间
-        if (numbers == null || numbers.length == 0) {
-            return new int[2];
-        }
-        int[] rst = new int[2];
-        HashMap<Integer, Integer> map = new HashMap<>();
-        int count = 1;
-        for (int i = 0; i < numbers.length; i++) {
-            map.put(numbers[i], count++);
-        }
-        for (Integer temp : map.keySet()) {
-            if (map.containsKey(target - temp) 
-                && map.get(temp) != map.get(target - temp)) {
-                rst[0] = Math.min(map.get(temp), map.get(target - temp));
-                rst[1] = Math.max(map.get(temp), map.get(target - temp));
-                return rst;
+    public ArrayList<Integer> subarraySum(int[] nums) {
+        // 2015-09-06 暴力 O(n^2)
+        ArrayList<Integer> rst = new ArrayList<>();
+        for (int i = 0; i < nums.length; i++) {
+            int sum = 0;
+            for (int j = i; j < nums.length; j++) {
+                sum += nums[j];
+                if (sum == 0) {
+                    rst.add(i);
+                    rst.add(j);
+                    return rst;
+                }
             }
         }
-        return new int[2];
-    }
-}
-```
-
-## 15. 3Sum
-
-Medium https://leetcode-cn.com/problems/3sum/
-
-Given an array nums of n integers, are there elements a, b, c in nums such that a + b + c = 0? 
-
-Find **all** unique triplets in the array which gives the sum of zero.
-
-```java
-public class Solution {
-    public ArrayList<ArrayList<Integer>> threeSum(int[] numbers) {
-        // 2015-10-14 DFS 
-        ArrayList<ArrayList<Integer>> rst = new ArrayList<>();
-        if (numbers == null || numbers.length == 0) {
-            return rst;
-        }
-        Arrays.sort(numbers);
-        ArrayList<Integer> list = new ArrayList<>();
-        helper(numbers, rst, list, 0);
         return rst;
     }
-    
-    private void helper(int[] numbers, ArrayList<ArrayList<Integer>> rst, 
-            ArrayList<Integer> list, int pos) {
-        if (list.size() == 3) {
-            if (list.get(0) + list.get(1) + list.get(2) == 0 
-                    && !rst.contains(list)) {
-                rst.add(new ArrayList<Integer>(list));
+}
+```
+
+Verison 2 用哈希表降低时间复杂度
+
+```java
+public class Solution {
+    public ArrayList<Integer> subarraySum(int[] nums) {
+        // write your code here
+        int len = nums.length;
+       
+        ArrayList<Integer> ans = new ArrayList<Integer>();
+        HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
+       
+        map.put(0, -1);
+       
+        int sum = 0;
+        for (int i = 0; i < len; i++) {
+            sum += nums[i];
+           
+            if (map.containsKey(sum)) {
+                ans.add(map.get(sum) + 1);
+                ans.add(i);
+                return ans;
             }
-            return;
+            
+            map.put(sum, i);
         }
-        for (int i = pos; i < numbers.length; i++) {
-            list.add(numbers[i]);
-            helper(numbers, rst, list, i + 1);
-            list.remove(list.size() - 1);
-        }
+       
+        return ans;
     }
 }
 ```
+
+## 1089. Duplicate Zeros
+
+https://leetcode-cn.com/problems/duplicate-zeros/
+
+Input: [1,0,2,3,0,4,5,0]
+Output: null
+Explanation: After calling your function, the input array is modified to: [1,0,0,2,3,0,0,4]
+
+```python
+class Solution:
+    def duplicateZeros(self, arr: List[int]) -> None:
+        zero_count = 0
+        for val in arr:
+            if val == 0:
+                zero_count += 1
+        
+        if zero_count == 0:
+            return
+        
+        for idx in reversed(range(len(arr))):
+            if arr[idx] == 0:
+                zero_count -= 1
+                if idx + zero_count + 1 < len(arr):
+                    arr[idx + zero_count + 1] = 0
+            if idx + zero_count < len(arr):
+                arr[idx + zero_count] = arr[idx]
+                
+```
+
+## Subarray Sum Closest
+
+Medium https://www.lintcode.com/problem/subarray-sum-closest/description
+
+Given an integer array, find a subarray with sum closest to zero.
+
+https://blog.csdn.net/willshine19/article/details/48494129
+
+## Fast Power
+
+Medium https://www.lintcode.com/problem/fast-power/description
+
+Calculate the `a ^ n % b` where `a`, `b` and `n` are all 32bit non-negative integers.
+
+https://blog.csdn.net/willshine19/article/details/48493253
+
+## Sort Letters by Case
+
+Medium https://www.lintcode.com/problem/sort-letters-by-case/
+
+Given a string which contains only letters. Sort it by lower case first and upper case second.
+
+https://blog.csdn.net/willshine19/article/details/48622531

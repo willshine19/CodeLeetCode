@@ -1,23 +1,31 @@
 # sort
 
+## 912. Sort an Array
+
+https://leetcode-cn.com/problems/sort-an-array/
+
+```python
+class Solution:
+    def sortArray(self, nums: List[int]) -> List[int]:
+```
+
 ### Quick Sort
 
 快速排序 https://blog.csdn.net/willshine19/article/details/52565739
 
 ```python
-def quick_sort(collection):
-    length = len(collection)
+def quick_sort(nums):
+    length = len(nums)
     if length <= 1:
-        return collection
-    else:
-        pivot = collection.pop()
-        greater, lesser = [], []
-        for element in collection:
-            if element > pivot:
-                greater.append(element)
-            else:
-                lesser.append(element)
-        return quick_sort(lesser) + [pivot] + quick_sort(greater)
+        return nums
+    pivot = nums.pop()
+    greater, lesser = [], []
+    for num in nums:
+        if num > pivot:
+            greater.append(num)
+        else:
+            lesser.append(num)
+    return quick_sort(lesser) + [pivot] + quick_sort(greater)
 
 ```
 
@@ -53,42 +61,49 @@ private static int partition(int[] src, int start, int end) {
 归并排序 https://blog.csdn.net/willshine19/article/details/52663843
 
 ```python
-def merge_sort(collection):
+def merge_sort(nums):
     def merge(left, right):
         result = []
         while left and right:
             result.append((left if left[0] <= right[0] else right).pop(0))
         return result + left + right
-    if len(collection) <= 1:
-        return collection
-    mid = len(collection) // 2
-    return merge(merge_sort(collection[:mid]), merge_sort(collection[mid:]))
+    if len(nums) <= 1:
+        return nums
+    mid = len(nums) // 2
+    return merge(merge_sort(nums[:mid]), merge_sort(nums[mid:]))
 ```
 
 ### Bubble Sort
 
 ```python
-def bubble_sort(collection):
-    length = len(collection)
+def bubble_sort(nums):
+    length = len(nums)
     for i in range(length-1):
         swapped = False
         for j in range(length-1-i):
-            if collection[j] > collection[j+1]:
+            if nums[j] > nums[j+1]:
                 swapped = True
-                collection[j], collection[j+1] = collection[j+1], collection[j]
-        if not swapped: break  # Stop iteration if the collection is sorted.
-    return collection
+                nums[j], nums[j+1] = nums[j+1], nums[j]
+        if not swapped: break  # Stop iteration if the nums is sorted.
+    return nums
 ```
 
-### 912 Sort an Array
-
-https://leetcode-cn.com/problems/sort-an-array/
-
+### Insertion Sort
 
 ```python
+def insertion_sort(nums):
+    for i in range(1, len(nums)):
+        insertion_index = i
+        while insertion_index > 0 and nums[insertion_index - 1] > nums[insertion_index]:
+            nums[insertion_index], nums[insertion_index - 1] = nums[insertion_index - 1], nums[insertion_index]
+            insertion_index -= 1
+
+    return nums
 ```
 
-### 148. Sort List
+---
+
+## 148. Sort List
 
 https://www.lintcode.com/problem/sort-list/description
 
